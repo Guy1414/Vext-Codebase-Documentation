@@ -2,6 +2,14 @@
 
 This documentation details the internal C# architecture and implementation of the Vext language. It is intended strictly for developers maintaining or contributing to the core compiler, virtual machine, and associated Language Server Protocol (LSP) tooling.
 
+---
+
+## Activity
+
+![Alt](https://repobeats.axiom.co/api/embed/517c0827080509d5693e453fe61a755707fb14d2.svg "Repobeats analytics image")
+
+---
+
 ## Solution Structure
 
 The Vext solution is physically partitioned into several .NET projects to enforce strict architectural boundaries:
