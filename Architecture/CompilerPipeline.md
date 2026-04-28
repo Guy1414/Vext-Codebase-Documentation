@@ -46,9 +46,9 @@ Because the Vext compiler serves the LSP natively, the Parser employs structural
 By far the most complicated infrastructure class in the engine, `SemanticPass` does not just "generate Bytecode" `List<Instruction>` natively. It strictly evaluates scopes and enforces absolute path executions natively using standard C# Stack techniques.
 
 ### Algorithmic Scoping
-Variable tracking occurs inside an explicitly constrained `Dictionary<string, int> varIndices` holding exactly 64 primitive entries to match VM memory boundaries natively natively. 
+Variable tracking occurs inside a `Dictionary<string, int> varIndices`. While the VM initializes variable storage at 64 entries, it dynamically expands to accommodate larger scopes as needed.
 
-To govern block shadowing (e.g., stopping an `if` statement from assigning variables leaking outwardly), the Compiler uses a high performance `Stack<BitArray> assignedSlots` check limit natively. Pushing scopes generates shallow bounds masking existing integer ids.
+To govern block shadowing (e.g., stopping an `if` statement from assigning variables leaking outwardly), the Compiler uses a high performance `Stack<BitArray> assignedSlots`. Pushing scopes generates shallow bounds masking existing integer IDs.
 
 ### Validating Guaranteed Output execution Native Paths
 For `UserFunction`, the Compiler validates exactly if a specific block yields a defined exit native hook leveraging `CheckReturnPath`. If returning structurally `int`, every single logical trailing boundary check sequence evaluates branches recursively enforcing safety guarantees.
@@ -57,9 +57,8 @@ For `UserFunction`, the Compiler validates exactly if a specific block yields a 
 Semantic pass limits overhead significantly by statically calculating numeric literal combinations simultaneously before releasing bytecodes to the VM structurally. 
 
 ```csharp
-// Fold structural limits in SemanticPass natively natively 
-if (op == "+" && left is LiteralNode { Type: "int", Value: long l2 } &&
-                 right is LiteralNode { Type: "int", Value: long r2 }) {
-    // Generate raw primitive literal node replacing mathematical syntax expression natively natively!
+// Fold structural limits in SemanticPass
+if (op == "+" && leftValue is long l && rightValue is int r) {
+    return new LiteralNode { Value = l + r, ... };
 }
 ```

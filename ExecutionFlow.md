@@ -11,12 +11,12 @@ The Host Environment (e.g., `Program.Main` in `Vext.TestRunner`) calls `VextEngi
 2.  **Parser Build**: 
     Instantiates `Parser(tokens)`. Calls `Parser.Parse()`. Iteratively executes `ParseStatement()` creating instances of `ASTNode`. Receives `List<StatementNode>`.
 3.  **Semantic Analytics**: 
-    Instantiates `SemanticPass()`. Iterates mapping via `SemanticPass.Analyze(node)`. 
-    Recursively descends nodes, invoking `AnalyzeExpression()` and `Fold()`. Populates `List<SemanticToken>` and generic string array of `UsedModules`.
+    Instantiates `SemanticPass(statements)`. Calls `semanticPass.Pass()`.
+    Recursively descends nodes, invoking `GetExpressionType()` and `Fold()`. Populates `SemanticTokens` and `UsedModules`.
 4.  **Error Check Break**: 
     If `Diagnostic.Errors.Count > 0`, immediately abort and wrap payload.
 5.  **Instruction Map Generation**:
-    Instantiates `BytecodeGenerator()`. Iterates nodes via `BytecodeGenerator.Generate(node)`. Methods like `EmitStatement()` translate tree nodes to `Instruction` instantiations tracking `VextVMBytecode`. Receive `List<Instruction>`.
+    Calls `BytecodeGenerator.EmitStatement(node, instructions)`. Translates tree nodes to `Instruction` objects tracking `VextVMBytecode`.
 6.  **Yielding State**:
     All arrays are packaged into a read-only `CompilationResult` record containing instructions and variable dictionary mappings. Returned to the host environment.
 
@@ -27,13 +27,13 @@ The Host Environment requests execution, taking `CompilationResult` instructions
 2.  **Module Load**:
     Iterates over the compilation `UsedModules` payload strings, instantiating standard C# models like `IOModule` or `MathModule`.
 3.  **IO Bootstrapping**:
-    Instantiates a custom `ConsoleOutput` wrapper matching text streams required (`Console.Out`, `Console.In`) to satisfy standard `IOModule` constructor dependency injection.
+    Instantiates a `RuntimeOutput` wrapper (optionally wrapping `TextWriter` and `TextReader`) to satisfy module dependencies.
 4.  **VM Allocation**: 
     `VextVM` is instantiated. Memory arrays (`stack` and `variables`) are heavily pre-allocated.
 
 ## 4. Hardware Loop Simulation (`VextVM.Run`)
 1.  **Iterative Advance**: 
-    The `Execute()` method triggers an internal `while(ip < code.Length)`.
+    The `Run()` method triggers an internal `while` loop.
 2.  **Instruction Decode**:
     The native enum `Instruction.Op` invokes specific `switch` blocks.
 3.  **State Mangle**:

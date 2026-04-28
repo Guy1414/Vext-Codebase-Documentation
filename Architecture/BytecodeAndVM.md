@@ -7,8 +7,8 @@ The core of Vext execution occurs natively within `VextVM.cs`. This document pro
 ## 1. Instruction Set Architecture (Bytecode)
 
 Vext is not interpreted instruction by instruction via abstract nodes. `SemanticPass.cs` aggressively compiles logic into a direct flat array list sequentially (`List<Instruction>`). Each instruction contains:
-- **`OpCode`** (E.g. `VextVMBytecode.ADD`, `STORE_VAR`)
-- **`Arg`** (A generic object tracking jump integer targets, variable indices, or numeric literals cleanly)
+- **`Op`** (E.g. `VextVMBytecode.ADD_INT`, `STORE_VAR`)
+- **`Arg`** (A generic object tracking jump targets, variable indices, or literals)
 
 ### Critical Opcodes Overview
 
@@ -17,7 +17,8 @@ Vext is not interpreted instruction by instruction via abstract nodes. `Semantic
 | `LOAD_CONST` | Pushes a numeric or string literal from `ArgVal` to the `stack`. |
 | `LOAD_VAR`   | Takes the `ArgInt` slot index, reads from `variables[]`, and pushes to the `stack`. |
 | `STORE_VAR`  | Pops the top `stack` limit and assigns it linearly to `variables[ArgInt]`. |
-| `ADD` / `SUB` | Math endpoints. Pops 2 values sequentially, calculates, and pushes the result. If string natively, concat triggers globally. |
+| `ADD_INT` / `SUB` | Math endpoints. Pops 2 values, calculates, and pushes result. |
+| `CONCAT_STRING`| Pops 2 values and performs string concatenation. |
 | `JMP`        | Adjusts `ip` (Instruction Pointer) directly to `ArgInt` limits globally. |
 | `JMP_IF_FALSE`| Pops `bool` stack. If false, executes absolute `JMP` limit mapping structural boundaries (used heavily in `while` and `if` exits). |
 | `CALL`       | Executes native dictionary Hook mappings spanning `Sp` limits cleanly seamlessly seamlessly. |
@@ -28,8 +29,8 @@ Vext is not interpreted instruction by instruction via abstract nodes. `Semantic
 
 `VextVM.cs` actively attempts to prevent allocation cycles during loops cleanly natively to reduce C# GC spikes natively mapping. 
 
-- **Stack Execution Length Limit**: `private VextValue[] stack = new VextValue[256];`
-- **Variable Storage Array Limit**: `private VextValue[] variables = new VextValue[64];`
+- **Stack Length**: `private VextValue[] stack = new VextValue[256];`
+- **Variable Storage**: `private VextValue[] variables = new VextValue[64];` (Expands dynamically)
 
 Memory sizes expand natively `(Length * 2)` but default initialization avoids overhead entirely linearly. The Pointer mappings (`ref int sp` tracking lengths) avoid list overhead completely completely completely.
 

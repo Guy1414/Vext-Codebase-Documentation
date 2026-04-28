@@ -1,33 +1,45 @@
 # Vext Internal Codebase Documentation
 
-Welcome to the internal engineering documentation for the **Vext Compiler and Virtual Machine** architecture. 
+Welcome to the internal engineering documentation for the **Vext Compiler and Virtual Machine** architecture.
 
-If you are reading this, you are a compiler engineer, standard library maintainer, or core contributor aiming to expand the capabilities of the Vext execution engine. This documentation suite covers the complete lifecycle of a Vext program, from raw character lexing to bytecode execution cycles within the JVM loop.
+This documentation suite is designed for compiler engineers, standard library maintainers, and core contributors. It covers the complete lifecycle of a Vext program, from raw character lexing to bytecode execution cycles within the virtual machine.
 
 ---
 
 ## 🏗️ Architecture Overview
 
-The Vext codebase enforces a strict separation of concerns, fundamentally split between AOT compilation and structural execution. 
+The Vext codebase enforces a strict separation of concerns, fundamentally split between AOT compilation and structural execution.
 
-- **Vext (The Compiler):** Operates on the source text string. It owns `Lexer.cs`, `Parser.cs`, and `SemanticPass.cs`. It is completely ignorant of how bytecode is fundamentally executed array-wise.
-- **Runtime (The Virtual Machine):** The `VextVM.cs` operates exclusively on bytecode. It contains fixed-size arrays for stacks, mathematical instruction mappings, and native C# method hook registries.
-- **Vext.Shared:** The bridging domain. It holds `VextVMBytecode`, AST `Nodes`, and the ultra-critical `VextValue` struct mapping runtime memory.
-- **Tooling:** The `Vext.LSP` handles JSON-RPC standard telemetry across standard standard I/O pipes. 
+- **Vext (The Compiler):** Operates on source text. Contains the `Lexer`, `Parser`, and `SemanticPass`. Its sole purpose is to transform strings into validated bytecode.
+- **Runtime (The Virtual Machine):** The `VextVM` operates exclusively on bytecode. It manages the execution stack, variable storage, and native module hooks.
+- **Vext.Shared:** The bridge between the compiler and runtime. Defines the AST nodes, bytecode instructions, and the `VextValue` memory representation.
+- **Tooling:** The `Vext.LSP` provides language server support for VS Code, including syntax highlighting and real-time diagnostics.
 
 ---
 
-## 📚 Engineering Resources
+## 📖 Engineering Guides
 
-To maintain consistency and extreme performance across the Vext suite, please review the critical system mappings:
+Select a module below to dive into the technical details of the Vext engine.
 
-### 1. Developer Guidelines
-- **[Contributing & Style Guide](Contributing/StyleGuide.md):** The mandatory C# conventions spanning everything from `Allman` brace placement to implicit scoping techniques.
+### [1. Execution Flow](ExecutionFlow.md)
+Trace the rigorous path from a source code string to a finished VM execution context. Understand the interaction between the `VextEngine` and the `RuntimeEngine`.
 
-### 2. Engine Architecture
-- **[Compiler Pipeline](Architecture/CompilerPipeline.md):** A deep dive into Token generation, Recursive Descent Parsing boundaries, and Semantic Scope extraction (`Stack<BitArray>`).
-- **[Bytecode and the VM](Architecture/BytecodeAndVM.md):** The core of Vext execution. Understand the 256-limit bytecode stack, instruction limits, `JMP_IF_FALSE` offsets, and operational limits.
-- **[Shared Data Structures](Architecture/SharedDataStructures.md):** Learn why `VextValue` uses `StructLayout(LayoutKind.Explicit)` to simulate a C Union, bypassing C# runtime garbage collection pauses natively.
+### [2. Compiler Pipeline](Architecture/CompilerPipeline.md)
+Explore the recursive descent parser, lexical analysis, and the complex `SemanticPass` that handles type inference and constant folding.
 
-### 3. Peripheral Tooling
-- **[Language Server Protocol (LSP)](Tooling/LanguageServer.md):** Understand the background `Vext.LSP.exe` daemon architecture, VS Code Node.js extension clients, and text syncing mechanics.
+### [3. Bytecode & Virtual Machine](Architecture/BytecodeAndVM.md)
+Deep dive into the Vext Instruction Set Architecture (ISA), memory layouts, and the high-performance execution loop.
+
+### [4. Shared Data Structures](Architecture/SharedDataStructures.md)
+Learn about the foundational types like `VextValue`, which uses explicit memory layouts to minimize GC pressure.
+
+### [5. Developer Guidelines](Contributing/StyleGuide.md)
+Review the mandatory C# coding standards and contribution rules for the Vext project.
+
+### [6. Tooling & LSP](Tooling/LanguageServer.md)
+Details on the Language Server Protocol implementation and the VS Code extension architecture.
+
+---
+
+> [!TIP]
+> Always verify changes against the `Vext.Shared/Rules/LanguageSpecs.cs` file, which serves as the ultimate source of truth for keywords and operator precedence.

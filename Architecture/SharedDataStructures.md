@@ -26,11 +26,14 @@ The Virtual Machine natively supports injecting independent execution limits nat
 A `Module` is a simple dictionary mapping string namespaces into C# `Func<object[], object?>` native hooks natively natively. 
 
 ```csharp
-// Example Math Module Architecture mapping cleanly natively 
+// Example Math Module Architecture
 public Module Initialize()
 {
-    RegisterFunction("Math", "sin", args => System.Math.Sin(Convert.ToDouble(args[0])), "float", ["numeral"]);
-    RegisterFunction("Math", "cos", args => System.Math.Cos(Convert.ToDouble(args[0])), "float", ["numeral"]);
+    Add("Sin", new Function("Sin", 1, args => Math.Sin(Convert.ToDouble(args[0]))) 
+    { 
+        ReturnType = "float",
+        Parameters = [new FunctionParameterNode { Name = "a", Type = "numeral" }]
+    });
     return this;
 }
 ```
