@@ -34,7 +34,7 @@ Instead of generic expression reading, functions explicitly fall through based o
 6. `ParseTerm()` (`+`, `-`)
 7. `ParseFactor()` (`*`, `/`, `%`)
 8. `ParsePower()` (`**`)
-9. `ParsePrimary()` (Identifiers, literals, brackets)
+9. `ParsePrimary()` (Identifiers, literals, brackets, explicit casting)
 
 ### Syntactic Recovery (`RecoverStm()`)
 Because the Vext compiler serves the LSP natively, the Parser employs structural recoveries to prevent total compiler failures on trailing brackets. Instead of halting completely, the engine forces the scanner to advance until resolving the nearest semicolon `;`, permitting later code blocks to continue evaluating correctly.

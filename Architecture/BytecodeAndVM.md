@@ -19,8 +19,10 @@ Vext is not interpreted instruction by instruction via abstract nodes. `Semantic
 | `STORE_VAR`  | Pops the top `stack` limit and assigns it linearly to `variables[ArgInt]`. |
 | `ADD_INT` / `SUB` | Math endpoints. Pops 2 values, calculates, and pushes result. |
 | `CONCAT_STRING`| Pops 2 values and performs string concatenation. |
+| `INC_VAR` / `DEC_VAR` | Increments or decrements a variable slot directly by 1. |
 | `JMP`        | Adjusts `ip` (Instruction Pointer) directly to `ArgInt` limits globally. |
 | `JMP_IF_FALSE`| Pops `bool` stack. If false, executes absolute `JMP` limit mapping structural boundaries (used heavily in `while` and `if` exits). |
+| `CAST_INT` / `CAST_FLOAT` / `CAST_BOOL` | Converts the top stack value to the specified type. |
 | `CALL`       | Executes native dictionary Hook mappings spanning `Sp` limits cleanly seamlessly seamlessly. |
 
 ---
