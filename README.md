@@ -34,8 +34,9 @@ The Vext solution is physically partitioned into several .NET projects to enforc
 
 The following documents dissect the specific C# implementations of the core systems:
 
-*   **[Architecture](Architecture.md)**: System boundaries, static vs. dynamic project linkage.
-*   **[Compiler](Compiler.md)**: Detailed breakdown of the frontend pipeline C# classes.
-*   **[Runtime](Runtime.md)**: Implementation details of the stack-based VM loop and C#-to-Vext module interop.
 *   **[Execution Flow](ExecutionFlow.md)**: A step-by-step C# method call trace from source code string to evaluated state.
-*   **[Data Structures](DataStructures.md)**: Deep dive into the primary memory allocations and layouts (`VextValue` `StructLayout`, AST inheritance).
+*   **[Compiler Pipeline](Architecture/CompilerPipeline.md)**: Explore the recursive descent parser, lexical analysis, and the complex `SemanticPass` that handles type inference and constant folding.
+*   **[Bytecode & Virtual Machine](Architecture/BytecodeAndVM.md)**: Deep dive into the Vext Instruction Set Architecture (ISA), memory layouts, and the high-performance execution loop.
+*   **[Shared Data Structures](Architecture/SharedDataStructures.md)**: Learn about the foundational types like `VextValue`, which uses explicit memory layouts to minimize GC pressure.
+*   **[Developer Guidelines](Contributing/StyleGuide.md)**: Review the mandatory C# coding standards and contribution rules for the Vext project.
+*   **[Tooling & LSP](Tooling/LanguageServer.md)**: Details on the Language Server Protocol implementation and the VS Code extension architecture.
