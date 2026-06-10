@@ -42,17 +42,18 @@ else if (char.IsLetter(current))
 
 ---
 
-## 2. Instantiation (Target-Typed `new`)
+## 2. Instantiation (Explicit Typing & Collection Expressions)
 
-When the types are explicitly clear from the context (such as return statements or variable definitions), we leverage C# 9+ target-typed `new()` expressions instead of repeating the class name.
+We prioritize readability over brevity when instantiating objects. Avoid C# 9 target-typed `new()` expressions. Instead, explicitly state the class name for clarity. For standard collections, you may use C# 12 collection expressions (`[]`).
 
 ```csharp
 // CORRECT
-List<Token> tokens = new();
-public static readonly Dictionary<string, int> Precedence = new();
+List<Token> tokens = new List<Token>();
+RuntimeOutput output = new RuntimeOutput(writer, reader);
+Dictionary<string, object> functions = [];
 
 // INCORRECT
-List<Token> tokens = new List<Token>();
+List<Token> tokens = new();
 ```
 
 ---
